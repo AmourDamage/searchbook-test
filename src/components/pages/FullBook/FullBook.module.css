@@ -1,0 +1,56 @@
+.fullbook {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: rgb(227 227 227);
+    padding: 20px;
+    max-width: 550px;
+}
+
+.description {
+    width: 450px;
+    padding: 20px;
+    margin: 0;
+}
+
+.categories {
+    width: 450px;
+    margin: 0;
+    padding: 20px;
+}
+
+.title {
+    margin: 30px 0px 0px 0px;
+    text-align: center;
+    max-width: 1000px;
+}
+
+.img {
+    width: 190px;
+    height: 250px;
+}
+
+.button {
+    margin: 10px 0px 0px 10px;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@media (max-width: 1024px) {
+    .fullbook {
+        max-width: 400px;
+        margin-top: 20px;
+    }
+
+    .description {
+        width: 400px;
+        padding: 20px;
+        margin: 0;
+    }
+  }

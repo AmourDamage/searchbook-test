@@ -1,0 +1,25 @@
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.search {
+    width: 450px;
+    margin-bottom: 60px;
+}
+
+.select {
+    width: 120px;
+}
+
+
+
+@media (max-width: 600px) {
+  .form {
+    margin: 0 auto;
+  }
+
+}
+  

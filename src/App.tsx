@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Layout } from 'antd';
+import MainHeader from './components/Header/Header';
+import Main from './components/pages/Main';
+import { Route, Routes } from 'react-router-dom';
+import FullBook from './components/pages/FullBook';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <MainHeader></MainHeader>
+      <Routes>
+        <Route path="/" element={<Main></Main>}></Route>
+        <Route path=":bookId" element={<FullBook></FullBook>}></Route>
+      </Routes>
+    </Layout>
   );
-}
+};
 
 export default App;
