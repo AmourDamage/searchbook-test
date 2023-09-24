@@ -1,8 +1,8 @@
 import { Layout } from 'antd';
 import MainHeader from './components/Header/Header';
-import Main from './components/pages/Main';
+import Main from './pages/Main';
 import { Route, Routes } from 'react-router-dom';
-import FullBook from './components/pages/FullBook';
+import FullBook from './pages/FullBook';
 
 const App = () => {
   return (

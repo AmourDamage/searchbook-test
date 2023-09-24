@@ -2,8 +2,8 @@ import { Spin } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { useSelector } from 'react-redux';
 
-import { booksState } from '../../../redux/book/selectors';
-import BookList from '../../BookList';
+import { booksState } from '../../redux/book/selectors';
+import BookList from '../../components/BookList';
 
 const Main = () => {
   const { items, status } = useSelector(booksState);

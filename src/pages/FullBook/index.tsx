@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import classes from '../FullBook/FullBook.module.css';
 import { Button } from 'antd';
 import axios from 'axios';
-import { IVolumeInfo } from '../../../models/book';
+import { IVolumeInfo } from '../../models/book';
 
 const FullBook = () => {
   const navigate = useNavigate();
