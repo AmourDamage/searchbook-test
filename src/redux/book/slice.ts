@@ -1,65 +1,60 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { IBook } from '../../models/book';
-import {IInitialState, IValue, Status} from './types'
+import { IBooks } from '../../models/book';
+import {IQueryParams, IValue, Status} from './types'
 
-
-export const fetchBooks = createAsyncThunk<IBook[], IValue>('books/fetchBooksStatus',
-    async(value) => {
-     const {title, subject, order } = value
+export const fetchBooks = createAsyncThunk<IBooks, IQueryParams>('books/fetchBooksStatus',
+    async(values) => {
+     const {title, subject, order, currentPage = 1, perPage = 30 } = values
         try {
-          const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${subject === 'All' ? '' : subject}+intitle:${title}&maxResults=30&orderBy=${order}&key=AIzaSyAFr7KolEZ2_w1f9ba8mPcGHxpgCfQIwkg`)
-          return data.items
+          const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${subject === 'All' ? '' : subject}+intitle:${title}&maxResults=${perPage}&startIndex=${currentPage}&orderBy=${order}&key=AIzaSyAFr7KolEZ2_w1f9ba8mPcGHxpgCfQIwkg`)
+          return data
         } catch(e) {
           return console.log(e)
         }
     }
 )
 
-export const fetchMoreBooks = createAsyncThunk('books/fetchMoreBooksStatus',
-    async(paginate: number) => {
-        try {
-          const { data } = await axios.get(
-            `https://www.googleapis.com/books/v1/volumes?q=startIndex=${paginate}&maxResults=30`,
-          );
-         return data.items
-        } catch(e) {
-          return console.log(e)
-        }
-    }
-)
-
-
-const initialState: IInitialState = {
-    items: [],
-    status: Status.EMPTY,
+const initialState: IValue = {
+  items: [],
+  status: Status.EMPTY,
+  totalItems: 0,
+  values: {
+    title: '',
+    subject: '',
+    order: 'relevance',
+    perPage: 30,
+    currentPage: 1,
+  },
 }
 
 const bookSlice = createSlice({
     name: 'book',
     initialState,
     reducers: {
-      addBooks(state, action) {
-        state.items = state.items.concat(action.payload)
+      switchPage(state, action) {
+        state.values.currentPage = action.payload
       },
+      getValues(state, action) {
+        state.values = {...state.values, ...action.payload}
+      },
+      resetTitleValue(state) {
+        state.values.title = ''
+      }
     },
-
      extraReducers: (builder) => {
-      builder.addCase(fetchBooks.pending, (state: IInitialState) => {
+      builder.addCase(fetchBooks.pending, (state: IValue) => {
         state.status = Status.LOADING
       })
 
-      builder.addCase(fetchBooks.fulfilled, (state: IInitialState, action: PayloadAction<IBook[]>) => {
-        state.items = action.payload;
+      builder.addCase(fetchBooks.fulfilled, (state: IValue, action: PayloadAction<IBooks>) => {
+        state.items = action.payload.items;
+        state.totalItems = action.payload.totalItems
         state.status = Status.SUCCESS
-      })
-
-      builder.addCase(fetchMoreBooks.fulfilled, (state: IInitialState, action: PayloadAction<IBook[]>) => {
-        state.items.push(...action.payload)
       })
     }
   });
 
-export const {addBooks} = bookSlice.actions
+export const { switchPage, getValues, resetTitleValue} = bookSlice.actions
 
 export default bookSlice.reducer;
