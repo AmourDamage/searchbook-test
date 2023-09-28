@@ -1,28 +1,26 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
-import { Button, Form, Select } from 'antd';
-import { fetchBooks, fetchMoreBooks } from '../../redux/book/slice';
+import { Form, Select } from 'antd';
+import { fetchBooks, getValues, switchPage } from '../../redux/book/slice';
 import { AppDispatch } from '../../redux/store';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import classes from '../BookForm/bookForm.module.css';
-
 import Input from 'antd/es/input/Input';
+import { booksState } from '../../redux/book/selectors';
+import { IQueryParams } from '../../redux/book/types';
 
 const BookForm: React.FC = () => {
-  const [value, setValue] = useState({
+  const [value, setValue] = useState<IQueryParams>({
     title: '',
     subject: '',
     order: 'relevance',
   });
-  const [limit, setLimit] = useState(60);
   const dispatch = useDispatch<AppDispatch>();
-
-  const handleChange = (newValue: string, field: string) => {
-    setValue({ ...value, [field]: newValue });
-  };
+  const { values } = useSelector(booksState);
 
   const onFinish = useCallback(() => {
+    dispatch(getValues(value));
     dispatch(fetchBooks(value));
+    dispatch(switchPage(1));
   }, [dispatch, value]);
 
   useEffect(() => {
@@ -36,26 +34,15 @@ const BookForm: React.FC = () => {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, [onFinish]);
-
-  function handleAddBooks(limit: number) {
-    setLimit(limit + 30);
-    dispatch(fetchMoreBooks(limit));
-  }
+  }, [onFinish, value]);
 
   return (
-    <Form
-      className={classes.form}
-      name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      onFinish={onFinish}
-      autoComplete="off">
+    <Form className={classes.form} onFinish={onFinish} name="basic" autoComplete="off">
       <div className="main__search-wrap">
         <Form.Item name="search">
           <Input
-            value={value.title}
-            onChange={(e) => handleChange(e.target.value, 'title')}
+            value={values.title}
+            onChange={(e) => setValue({ ...value, title: e.target.value })}
             className={classes.search}
             placeholder="Введите название книги"
           />
@@ -67,7 +54,7 @@ const BookForm: React.FC = () => {
             <Select
               defaultValue="All"
               style={{ width: 110 }}
-              onChange={(newValue) => handleChange(newValue, 'subject')}
+              onChange={(newValue) => setValue({ ...value, subject: newValue })}
               options={[
                 { value: 'Art', label: 'Art' },
                 { value: 'Biography', label: 'Biography' },
@@ -85,7 +72,7 @@ const BookForm: React.FC = () => {
             <Select
               defaultValue="relevance"
               style={{ width: 110 }}
-              onChange={(newValue) => handleChange(newValue, 'order')}
+              onChange={(newValue) => setValue({ ...value, order: newValue })}
               options={[
                 { value: 'relevance', label: 'relevance' },
                 { value: 'newest', label: 'newest' },
@@ -93,7 +80,6 @@ const BookForm: React.FC = () => {
             />
           </Form.Item>
         </div>
-        <Button onClick={() => handleAddBooks(limit)}>add books</Button>
       </div>
     </Form>
   );

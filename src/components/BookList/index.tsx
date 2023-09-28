@@ -2,14 +2,16 @@ import { FC } from 'react';
 import { IBook, IBooks } from '../../models/book';
 import Book from '../Book/Book';
 
-const BookList: FC<IBooks> = ({ items }: IBooks) => {
+type BookListProps = Omit<IBooks, 'totalItems'>;
+
+const BookList: FC<BookListProps> = ({ items }: BookListProps) => {
   return (
     <>
-      {items.map((book: IBook, index) => {
+      {items.map((book: IBook) => {
         return (
           <Book
             id={book.id}
-            key={index}
+            key={book.id}
             title={book.volumeInfo.title}
             image={book.volumeInfo.imageLinks?.thumbnail}
             categories={book.volumeInfo.categories}

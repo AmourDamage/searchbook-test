@@ -10,10 +10,9 @@ export interface IVolumeInfo {
 export interface IBook {
     id: string;
     volumeInfo: IVolumeInfo;
-    items?: any;
 }
 
 export interface IBooks {
     items: IBook[]
-    totalItems?: number;
+    totalItems: number
 }

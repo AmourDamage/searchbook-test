@@ -104,6 +104,27 @@ code {
   background: white;
 }
 
+.pages {
+  width: 500px;
+  height: 100px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(10, 14, 14);
+  gap: 30px;
+}
+
+.current-page {
+  border: 2px solid gray;
+  font-weight: 700;
+  padding: 5px;
+}
+
+.page {
+  cursor: pointer;
+}
+
 @media (max-width: 1024px) {
   body {
     max-width: 1024px;
@@ -174,6 +195,10 @@ code {
   .main__search-selects {
     flex-direction: column;
     max-height: 100px;
+  }
+
+  .pages {
+    gap: 20px;
   }
 }
 
